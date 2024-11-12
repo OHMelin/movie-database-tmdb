@@ -13,14 +13,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useNuxtApp } from '#app';
+import { useNuxtApp, useRoute } from '#app';
 
 const movieData = ref(null);
-const movieId = 550;
-
+const route = useRoute();
 const { $axios } = useNuxtApp();
 
 const fetchMovieData = async () => {
+  const movieId = route.params.id;
+  if (!movieId) return;
+
   try {
     const response = await $axios.get(`/movie/${movieId}`);
     movieData.value = response.data;
