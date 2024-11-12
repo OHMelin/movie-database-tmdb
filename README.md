@@ -19,3 +19,15 @@ Build the application for production:
 ```bash
 docker-compose build
 ```
+
+## Technologies used
+
+- Nuxt
+- TypeScript
+- JavaScript
+- ScSS
+- Tailwind
+- Vuetify
+- Docker
+- Git
+- Vercel
