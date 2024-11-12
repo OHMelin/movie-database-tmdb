@@ -1,11 +1,13 @@
 <template>
-  <div v-if="movieData">
-    <h1>{{ movieData.title }}</h1>
-    <p>{{ movieData.overview }}</p>
-    <img :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`" :alt="movieData.title + ' movie poster'" />
-  </div>
-  <div v-else>
-    <p>Loading movie details...</p>
+  <div class="wrapper">
+    <div v-if="movieData">
+      <h1>{{ movieData.title }}</h1>
+      <p>{{ movieData.overview }}</p>
+      <img :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`" :alt="movieData.title + ' movie poster'" />
+    </div>
+    <div v-else>
+      <p>Loading movie details...</p>
+    </div>
   </div>
 </template>
 

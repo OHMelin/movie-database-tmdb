@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>Frontpage</h1>
     <Action button-text="Test" to="/movie" />
   </div>
