@@ -4,7 +4,7 @@
       <h1 class="font-bold text-3xl">Find Tonights Movie</h1>
     </div>
     <div v-for="genre in genreListData" :key="genre.id">
-      <p>{{ genre.name }} - ({{ genre.totalMovies }} movies in this genre)</p>
+      <p>{{ genre.name }} - (<NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.totalMovies }} movies in this genre</NuxtLink>)</p>
       <div v-for="movie in genre.movies" :key="movie.id">
         <nuxtLink :to="'/movies/' + movie.id">{{ movie.title }}</nuxtLink>
       </div>
