@@ -1,13 +1,7 @@
-<template>
-  <div class="wrapper">
-    <h1>Frontpage</h1>
-  </div>
-</template>
-
 <script setup>
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+
+router.push('/movies')
 </script>
-
-<style scoped>
-
-</style>
