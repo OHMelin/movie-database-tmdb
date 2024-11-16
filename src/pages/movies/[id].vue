@@ -23,9 +23,20 @@
     </div>
   </div>
   <div v-if="movieData" class="wrapper">
-    <!-- <p>Trailer key: {{ trailer.results[0].key }}</p> -->
+    <h2 class="font-bold text-2xl">Trailer</h2>
+    <div class="iframe-container">
+      <iframe
+        class="responsive-iframe rounded-md"
+        v-if="trailer.results[0].key"
+        :src="`https://www.youtube.com/embed/${trailer.results[0].key}`"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        height="100%"
+      ></iframe>
+    </div>
 
-    <p class="font-bold text-2xl">Actors</p>
+    <h2 class="font-bold text-2xl mt-5">Actors</h2>
     <v-sheet max-width="100%">
       <v-slide-group mobile>
         <v-slide-group-item
@@ -51,7 +62,7 @@
       </v-slide-group>
     </v-sheet>
 
-    <p class="font-bold text-2xl">Directors</p>
+    <h2 class="font-bold text-2xl mt-5">Directors</h2>
     <v-sheet max-width="100%">
       <v-slide-group mobile>
         <v-slide-group-item
@@ -123,6 +134,23 @@ onMounted(() => {
 .backdrop {
   background-position: center;
   background-size: cover;
+}
+
+.iframe-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 }
 
 @media screen and (max-width: 640px) {
