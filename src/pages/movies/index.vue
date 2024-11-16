@@ -7,7 +7,7 @@
   <div class="wrapper">
     <div v-for="genre in genreListData" :key="genre.id">
       <p class="font-bold text-2xl">{{ genre.name }} - (<NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.totalMovies }} movies in this genre</NuxtLink>)</p>
-      <v-sheet class="mx-auto">
+      <v-sheet>
         <v-slide-group mobile>
           <v-slide-group-item
             v-for="movie in genre.movies"
@@ -26,7 +26,7 @@
                 }"
               >
               </v-card>
-              <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm">{{ movie.title }}</p>
+              <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ movie.title }}</p>
             </NuxtLink>
           </v-slide-group-item>
         </v-slide-group>
