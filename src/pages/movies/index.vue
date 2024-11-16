@@ -8,7 +8,7 @@
     <div v-for="genre in genreListData" :key="genre.id">
       <p class="font-bold text-2xl">{{ genre.name }} - (<NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.totalMovies }} movies in this genre</NuxtLink>)</p>
       <v-sheet class="mx-auto">
-        <v-slide-group show-arrows>
+        <v-slide-group mobile>
           <v-slide-group-item
             v-for="movie in genre.movies"
             :key="movie.id"
@@ -68,7 +68,8 @@ onMounted(() => {
 
 <style scoped>
 .outer-wrapper {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/test.webp');
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../../assets/test.webp');
   background-size: cover;
   background-position: center;
   text-align: center;
