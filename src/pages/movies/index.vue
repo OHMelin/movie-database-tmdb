@@ -6,7 +6,7 @@
   </div>
   <div class="wrapper">
     <div v-for="genre in genreListData" :key="genre.id">
-      <p class="font-bold text-2xl">{{ genre.name }} - (<NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.totalMovies }} movies in this genre</NuxtLink>)</p>
+      <p class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} - ({{ genre.totalMovies }} total)</NuxtLink></p>
       <v-sheet>
         <v-slide-group mobile>
           <v-slide-group-item
@@ -68,7 +68,7 @@ onMounted(() => {
 
 <style scoped>
 .outer-wrapper {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
     url('../../assets/test.webp');
   background-size: cover;
   background-position: center;

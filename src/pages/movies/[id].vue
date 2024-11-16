@@ -23,7 +23,7 @@
     </div>
   </div>
   <div v-if="movieData" class="wrapper">
-    <h2 class="font-bold text-2xl">Trailer</h2>
+    <h2 class="font-bold text-2xl mt-5">Trailer</h2>
     <div class="iframe-container">
       <iframe
         class="responsive-iframe rounded-md"
