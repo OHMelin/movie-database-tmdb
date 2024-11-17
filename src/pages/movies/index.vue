@@ -2,7 +2,7 @@
   <div class="outer-wrapper">
     <div class="wrapper">
       <div>
-        <h1 class="font-bold text-5xl">Find Tonights Movie</h1>
+        <h1 class="font-bold text-5xl">Find Tonight's Movie</h1>
         <v-btn class="mt-5" to="/series">Or series..</v-btn>
       </div>
     </div>
