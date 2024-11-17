@@ -9,7 +9,7 @@
   </div>
   <div class="wrapper">
     <div v-for="genre in genreListData" :key="genre.id">
-      <p class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} - ({{ genre.totalMovies }} total)</NuxtLink></p>
+      <h2 class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} movies - ({{ genre.totalMovies }} total)</NuxtLink></h2>
       <v-sheet>
         <v-slide-group mobile>
           <v-slide-group-item

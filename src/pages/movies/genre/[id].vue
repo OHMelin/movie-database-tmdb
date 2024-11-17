@@ -1,17 +1,35 @@
 <template>
   <div class="wrapper">
-    <h1 class="font-bold text-3xl">All movies with the {{ genreName.name }} genre</h1>
-    <p>Total movies with this genre: {{ movieListTotal.total_results }}</p>
-    <div v-for="movie in movieListData" :key="movie.id">
-      <NuxtLink :to="'/movies/' + movie.id">{{ movie.title }}</NuxtLink>
+    <h1 class="font-bold text-2xl mt-5 mb-2">{{ genreName.name }} movies - ({{ movieListTotal.total_results }} total)</h1>
+    <div class="flex flex-wrap justify-center">
+      <NuxtLink v-for="movie in movieListData" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
+        <v-card
+          color="grey-lighten-1"
+          height="300"
+          width="200"
+          :style="{
+            backgroundImage: `url(https://image.tmdb.org/t/p/w200${movie.poster_path})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }"
+        >
+        </v-card>
+        <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ movie.title }}</p>
+      </NuxtLink>
     </div>
-    <v-btn @click="nextPage()">Next</v-btn>
-    <v-btn v-if="page > 1" @click=previousPage()>Previous</v-btn>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="movieListTotal.total_pages"
+        :total-visible="5"
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useNuxtApp, useRoute } from '#app';
 
 const movieListData = ref([]);
@@ -22,15 +40,10 @@ const page = ref(1);
 const route = useRoute();
 const { $axios } = useNuxtApp();
 
-const nextPage = async () => {
-  page.value = page.value + 1
+watch(page, (newPage) => {
   fetchMovieListData()
-}
-
-const previousPage = async () => {
-  page.value = page.value - 1
-  fetchMovieListData()
-}
+  window.scrollTo(0, 0)
+})
 
 const fetchMovieListData = async () => {
   const genreId = route.params.id;
