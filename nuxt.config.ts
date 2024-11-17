@@ -3,6 +3,14 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      title: 'WMDB - WEXO Movie Database',
+      meta: [
+        { name: 'description', content: 'Lorem, ipsum.' },
+      ],
+    },
+  },
   compatibilityDate: '2024-04-03',
   runtimeConfig: {
     public: {
