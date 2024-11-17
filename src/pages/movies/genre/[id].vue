@@ -21,8 +21,8 @@
     <div class="text-center">
       <v-pagination
         v-model="page"
-        :length="movieListTotal.total_pages"
-        :total-visible="5"
+        :length="500"
+        :total-visible="7"
       ></v-pagination>
     </div>
   </div>
@@ -30,20 +30,23 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { useNuxtApp, useRoute } from '#app';
+import { useRoute, useRouter } from '#app';
 
 const movieListData = ref([]);
 const movieListTotal = ref(0);
-const genreData = ref([])
+const genreData = ref([]);
 const genreName = ref("None");
 const page = ref(1);
+
 const route = useRoute();
+const router = useRouter();
 const { $axios } = useNuxtApp();
 
 watch(page, (newPage) => {
-  fetchMovieListData()
-  window.scrollTo(0, 0)
-})
+  router.replace({ query: { ...route.query, page: newPage } });
+  fetchMovieListData();
+  window.scrollTo(0, 0);
+});
 
 const fetchMovieListData = async () => {
   const genreId = route.params.id;
@@ -61,13 +64,15 @@ const fetchMovieListData = async () => {
 
     const response2 = await $axios.get(`/genre/movie/list`);
     genreData.value = response2.data.genres;
-    genreName.value = genreData.value.find(genre => genre.id === Number(genreId));
+    genreName.value = genreData.value.find((genre) => genre.id === Number(genreId));
   } catch (error) {
-    console.error('Error fetching movie data:', error);
+    console.error("Error fetching movie data:", error);
   }
 };
 
 onMounted(() => {
+  const queryPage = Number(route.query.page) || 1;
+  page.value = queryPage;
   fetchMovieListData();
 });
 </script>
