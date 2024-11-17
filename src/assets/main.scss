@@ -32,3 +32,8 @@
   align-items: center;
   width: 100%;
 }
+
+/* Remove the focus outline for v-slide-group */
+.v-slide-group:focus-visible {
+  outline: none;
+}
