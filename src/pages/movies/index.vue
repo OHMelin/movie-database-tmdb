@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div>
         <h1 class="font-bold text-5xl">Find Tonight's Movie</h1>
-        <v-btn class="mt-5" to="/series">Or series..</v-btn>
+        <v-btn color="slate" class="mt-5" to="/series">Or series..</v-btn>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@
           >
             <NuxtLink :to="'/movies/' + movie.id" class="m-2 w-[200px]">
               <v-card
-                color="grey-lighten-1"
+                color="wexo"
                 height="300"
                 width="200"
                 :style="{

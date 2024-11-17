@@ -4,7 +4,7 @@
     <div class="flex flex-wrap justify-center">
       <NuxtLink v-for="movie in movieListData" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
         <v-card
-          color="grey-lighten-1"
+          color="wexo"
           height="300"
           width="200"
           :style="{

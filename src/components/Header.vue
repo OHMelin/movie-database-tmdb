@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar>
+  <v-toolbar class="bg-wexo">
     <div class="flex gap-3">
       <div class="m-auto ml-5">
         <NuxtLink to="/">
@@ -8,8 +8,8 @@
         </NuxtLink>
         
       </div>
-      <v-btn variant="flat" to="/movies">Movies</v-btn>
-      <v-btn variant="flat" to="/series">Series</v-btn>
+      <v-btn color="slate" variant="flat" to="/movies">Movies</v-btn>
+      <v-btn color="slate" variant="flat" to="/series">Series</v-btn>
     </div>
     <v-toolbar-title></v-toolbar-title>
     
@@ -17,11 +17,3 @@
     <v-btn icon="mdi-account" to="/account"></v-btn>
   </v-toolbar>
 </template>
-
-<script setup>
-
-</script>
-
-<style>
-
-</style>

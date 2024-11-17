@@ -14,11 +14,16 @@
             <v-chip v-for="genre in movieData.genres" :key="genre">{{ genre.name }}</v-chip>
           </div>
         </div>
-        <img
-          class="rounded-sm w-[200px] h-[300px]"
-          :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
-          :alt="movieData.title + ' movie poster'"
-        />
+        <div class="flex flex-col gap-3" id="poster-container">
+          <div class="w-[200px] h-[300px]">
+            <img
+              class="rounded-sm"
+              :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
+              :alt="movieData.title + ' movie poster'"
+            />
+            <v-btn color="slate" class="w-full mt-3">Add to watchlist</v-btn>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +50,7 @@
         >
           <div class="m-2 w-[200px]">
             <v-card
-              color="grey-lighten-1"
+              color="wexo"
               height="300"
               width="200"
               :style="{
@@ -71,7 +76,7 @@
         >
           <div class="m-2 w-[200px]">
             <v-card
-              color="grey-lighten-1"
+              color="wexo"
               height="300"
               width="200"
               :style="{
@@ -156,6 +161,11 @@ onMounted(() => {
 @media screen and (max-width: 640px) {
   #hero-container {
     flex-wrap: wrap;
+  }
+
+  #poster-container {
+    width: 100%;
+    align-items: center;
   }
 }
 </style>
