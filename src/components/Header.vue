@@ -1,13 +1,21 @@
 <template>
-  <div class="bg-gray-200 p-2 flex justify-between">
-    <div class="flex justify-center align-middle">
-      <NuxtLink to="/">WMDB</NuxtLink>
+  <v-toolbar>
+    <div class="flex gap-3">
+      <div class="m-auto ml-5">
+        <NuxtLink to="/">
+          <v-icon>mdi-filmstrip</v-icon>
+          WMDB
+        </NuxtLink>
+        
+      </div>
+      <v-btn variant="flat" to="/movies">Movies</v-btn>
+      <v-btn variant="flat" to="/series">Series</v-btn>
     </div>
-    <div class="flex justify-center align-middle gap-2">
-      <v-btn to="/series">Series</v-btn>
-      <v-btn to="/movies">Movies</v-btn>
-    </div>
-  </div>
+    <v-toolbar-title></v-toolbar-title>
+    
+    <v-spacer></v-spacer>
+    <v-btn icon="mdi-account" to="/account"></v-btn>
+  </v-toolbar>
 </template>
 
 <script setup>
