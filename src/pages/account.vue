@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="account">
     <h1 class="font-bold text-3xl mb-5">{{ account.username }}'s profile</h1>
     <h2 class="font-bold text-2xl mt-5">Movie watchlist</h2>
     <v-sheet>
@@ -24,7 +24,7 @@
               </v-card>
               <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ item.title }}</p>
             </NuxtLink>
-            <v-btn color="red" class="w-full" @click="removeFromWatchlist(item.id)">Remove</v-btn>
+            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlist(item.id)">Remove</v-btn>
           </div>
         </v-slide-group-item>
       </v-slide-group>
@@ -35,9 +35,35 @@
 </template>
 
 <script setup>
-import { getAccountData, getMovieWatchlist, getSeriesWatchlist, removeFromWatchlist } from '@/services/tmdb.service';
+import { ref, onMounted } from 'vue';
+import { authenticate, getAccountData, getMovieWatchlist, getSeriesWatchlist, removeFromWatchlist } from '@/services/tmdb.service';
 
-const account = await getAccountData();
-const movieWatchList = await getMovieWatchlist();
-const seriesWatchList = await getSeriesWatchlist();
+const movieWatchList = ref({ data: { results: [] } });
+const seriesWatchList = ref({ data: { results: [] } });
+const account = ref();
+
+const handleRemoveFromWatchlist = async (itemId) => {
+  await removeFromWatchlist(itemId)
+  await fetchWatchlists();
+}
+
+const fetchAccountData = async () => {
+  account.value = await getAccountData();
+  if (!account.value) {
+    await authenticate();
+    account.value = await getAccountData();
+  }
+};
+
+const fetchWatchlists = async () => {
+  movieWatchList.value = await getMovieWatchlist();
+  seriesWatchList.value = await getSeriesWatchlist();
+};
+
+onMounted(async () => {
+  await fetchAccountData();
+  if (account.value) {
+    await fetchWatchlists();
+  }
+});
 </script>
