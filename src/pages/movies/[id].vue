@@ -99,7 +99,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useNuxtApp, useRoute } from '#app';
-import { authenticate, addToWatchList } from '@/services/tmdb.service.js';
+import { authenticate, addToWatchlist } from '@/services/tmdb.service.js';
 
 const route = useRoute();
 const { $axios } = useNuxtApp();
@@ -112,7 +112,7 @@ const directors = ref(null);
 
 const addMovieToWatchlist = async (movieId) => {
   if (await authenticate()) {
-    addToWatchList(movieId)
+    addToWatchlist(movieId)
   }
 };
 

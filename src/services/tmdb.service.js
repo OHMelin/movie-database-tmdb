@@ -1,5 +1,7 @@
 import { useNuxtApp, useRoute } from '#app';
 
+// Authentication
+
 export const authenticate = async () => {
   const { $axios } = useNuxtApp();
   const sessionId = localStorage.getItem('session_id');
@@ -35,10 +37,34 @@ export const getAccountData = async () => {
   return null
 }
 
-export const addToWatchList = async (itemId) => {
+// Movies
+
+export const addToWatchlist = async (itemId) => {
   const { $axios } = useNuxtApp();
   const sessionId = localStorage.getItem('session_id');
   const account = await getAccountData();
 
-  await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, watchlist: true });
+  await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, media_type: 'movie', watchlist: true });
+}
+
+export const removeFromWatchlist = async (itemId) => {
+  const { $axios } = useNuxtApp();
+  const sessionId = localStorage.getItem('session_id');
+  const account = await getAccountData();
+
+  return await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, media_type: 'movie', watchlist: false, });
+}
+
+export const getMovieWatchlist = async () => {
+  const { $axios } = useNuxtApp();
+  const account = await getAccountData();
+  return await $axios.get(`/account/${account.id}/watchlist/movies`);
+}
+
+// Series
+
+export const getSeriesWatchlist = async () => {
+  const { $axios } = useNuxtApp();
+  const account = await getAccountData();
+  return await $axios.get(`/account/${account.id}/watchlist/tv`);
 }
