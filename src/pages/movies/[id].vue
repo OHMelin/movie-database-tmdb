@@ -94,6 +94,12 @@
       </v-slide-group>
     </v-sheet>
   </div>
+  <v-snackbar v-model="snackbar.visible" :color="snackbar.type" :timeout="3000">
+    {{ snackbar.message }}
+    <template v-slot:actions>
+      <v-btn text @click="snackbar.visible = false">Close</v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script setup>
@@ -110,9 +116,16 @@ const trailer = ref(null);
 const cast = ref(null);
 const directors = ref(null);
 
+const snackbar = ref({
+  visible: false,
+  message: '',
+  type: '',
+});
+
 const addMovieToWatchlist = async (movieId) => {
   if (await authenticate()) {
-    addToWatchlist(movieId)
+    await addToWatchlist(movieId)
+    showSnackbar('Added to your watchlist', 'green');
   }
 };
 
@@ -136,6 +149,12 @@ const fetchMovieData = async () => {
   } catch (error) {
     console.error('Error fetching movie data:', error);
   }
+};
+
+const showSnackbar = (message, type) => {
+  snackbar.value.message = message;
+  snackbar.value.type = type;
+  snackbar.value.visible = true;
 };
 
 onMounted(() => {
