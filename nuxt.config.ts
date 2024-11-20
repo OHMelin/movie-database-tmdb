@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { fileURLToPath } from 'url';
 
 export default defineNuxtConfig({
   app: {
@@ -16,12 +17,13 @@ export default defineNuxtConfig({
     public: {
       tmdbApiKey: process.env.NUXT_TMDB_API_KEY,
       tmdbReadAccessToken: process.env.NUXT_TMDB_API_READ_ACCESS_TOKEN,
+      baseURL: process.env.NUXT_BASE_URL,
     },
   },
   ssr: false, // Set rendering to SPA as SSR is not needed
   srcDir: 'src/', // Set source folder to keep a more organized structure
   alias: {
-    "@": "/<srcDir>",
+    '@': fileURLToPath(new URL('./src/', import.meta.url)),
   },
   css: [
     "~/assets/main.scss"
