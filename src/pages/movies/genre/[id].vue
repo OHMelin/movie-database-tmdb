@@ -1,5 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="loading">
+    <v-skeleton-loader v-for="n in 5" :key="'skeleton-' + n" type="card"></v-skeleton-loader>
+  </div>
+  <div class="wrapper" v-if="!loading">
     <h1 class="font-bold text-2xl mt-5 mb-2">{{ genreName.name }} movies - ({{ movieListTotal.total_results }} total)</h1>
     <div class="flex flex-wrap justify-center">
       <NuxtLink v-for="movie in movieListData" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
@@ -37,6 +40,7 @@ const movieListTotal = ref(0);
 const genreData = ref([]);
 const genreName = ref("None");
 const page = ref(1);
+const loading = ref(true);
 
 const route = useRoute();
 const router = useRouter();
@@ -67,6 +71,8 @@ const fetchMovieListData = async () => {
     genreName.value = genreData.value.find((genre) => genre.id === Number(genreId));
   } catch (error) {
     console.error("Error fetching movie data:", error);
+  } finally {
+    loading.value = false;
   }
 };
 

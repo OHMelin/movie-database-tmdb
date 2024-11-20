@@ -2,7 +2,10 @@
   <div class="wrapper" v-if="account">
     <h1 class="font-bold text-3xl mb-5">{{ account.username }}'s profile</h1>
     <h2 class="font-bold text-2xl mt-5">Movie watchlist</h2>
-    <v-sheet>
+    <div v-if="loading">
+      <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
+    </div>
+    <v-sheet v-if="!loading">
       <v-slide-group mobile>
         <v-slide-group-item
           v-for="item in movieWatchList.data.results"
@@ -30,7 +33,36 @@
       </v-slide-group>
     </v-sheet>
     <h2 class="font-bold text-2xl mt-5">Series watchlist</h2>
-    <p v-for="item in seriesWatchList.data.results" :key="item.id">{{ item.title }}</p>
+    <div v-if="loading">
+      <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
+    </div>
+    <v-sheet v-if="!loading">
+      <v-slide-group mobile>
+        <v-slide-group-item
+          v-for="item in seriesWatchList.data.results"
+          :key="item.id"
+        >
+          <div class="flex flex-col m-2">
+            <NuxtLink :to="'/movies/' + item.id" class="w-[200px]">
+              <v-card
+                color="wexo"
+                height="300"
+                width="200"
+                :style="{
+                  backgroundImage: `url(https://image.tmdb.org/t/p/w200${item.poster_path})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }"
+              >
+              </v-card>
+              <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ item.title }}</p>
+            </NuxtLink>
+            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlistDialog(item.id)">Remove</v-btn>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-sheet>
   </div>
   <v-dialog v-model="dialog" width="400">
     <v-card
@@ -60,6 +92,7 @@ import { authenticate, getAccountData, getMovieWatchlist, getSeriesWatchlist, re
 const movieWatchList = ref({ data: { results: [] } });
 const seriesWatchList = ref({ data: { results: [] } });
 const account = ref();
+const loading = ref(true);
 
 const dialog = ref(false);
 const itemRef = ref();
@@ -93,6 +126,7 @@ const fetchAccountData = async () => {
 const fetchWatchlists = async () => {
   movieWatchList.value = await getMovieWatchlist();
   seriesWatchList.value = await getSeriesWatchlist();
+  loading.value = false;
 };
 
 const showSnackbar = (message, type) => {

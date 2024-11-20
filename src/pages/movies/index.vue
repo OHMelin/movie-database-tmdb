@@ -7,7 +7,13 @@
       </div>
     </div>
   </div>
-  <div class="wrapper">
+  <div class="wrapper" v-if="loading">
+    <div v-for="n in 5" :key="'skeleton-' + n">
+      <v-skeleton-loader type="text"></v-skeleton-loader>
+      <v-skeleton-loader type="card"></v-skeleton-loader>
+    </div>
+  </div>
+  <div class="wrapper" v-if="!loading">
     <div v-for="genre in genreListData" :key="genre.id">
       <h2 class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} movies - ({{ genre.totalMovies }} total)</NuxtLink></h2>
       <v-sheet>
@@ -44,6 +50,7 @@ import { useNuxtApp } from '#app';
 
 const genreListData = ref([]);
 const { $axios } = useNuxtApp();
+const loading = ref(true);
 
 const fetchGenreListData = async () => {
   try {
@@ -61,6 +68,8 @@ const fetchGenreListData = async () => {
     }));
   } catch (error) {
     console.error('Error fetching movie data:', error);
+  } finally {
+    loading.value = false;
   }
 };
 
