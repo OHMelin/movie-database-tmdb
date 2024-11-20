@@ -1,11 +1,18 @@
 <template>
   <div class="outer-wrapper">
-    <div class="wrapper">
-      <div>
-        <h1 class="font-bold text-5xl">Find Tonight's Movie</h1>
-        <v-btn color="slate" class="mt-5" to="/series">Or series..</v-btn>
+    <v-parallax
+      src="@/assets/test.webp"
+      width="100%"
+      class="backdrop items-center h-[500px]"
+    >
+      <div class="gradient-overlay"></div>
+      <div class="wrapper parallex-wrapper text-white text-center">
+        <div>
+          <h1 class="font-bold text-5xl">Find Tonight's Movie</h1>
+          <v-btn color="slate" class="mt-5" to="/series">Or series..</v-btn>
+        </div>
       </div>
-    </div>
+    </v-parallax>
   </div>
   <div class="wrapper" v-if="loading">
     <div v-for="n in 5" :key="'skeleton-' + n">
@@ -79,13 +86,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.outer-wrapper {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-    url('../../assets/test.webp');
-  background-size: cover;
-  background-position: center;
-  text-align: center;
-  color: white;
-  padding: 5rem;
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+}
+
+.parallex-wrapper {
+  margin: auto;
+  position: relative;
 }
 </style>

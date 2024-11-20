@@ -1,31 +1,34 @@
 <template>
-  <div
-    class="outer-wrapper backdrop"
-    :style="{ backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-      url(https://image.tmdb.org/t/p/original${backdropImage})` }"
+  <div class="outer-wrapper">
+    <v-parallax
+      :src="`https://image.tmdb.org/t/p/original${backdropImage}`"
+      width="100%"
+      class="backdrop items-center h-[500px]"
     >
-    <div class="wrapper text-white">
-      <div v-if="movieData" class="flex gap-5" id="hero-container">
-        <div>
-          <h1 class="font-bold text-3xl mb-5">{{ movieData.title }}</h1>
-          <p>{{ movieData.overview }}</p>
-          <p class="mt-5 mb-2 text-lg">Release: {{ movieData.release_date }}</p>
-          <div class="flex gap-1 flex-wrap">
-            <v-chip v-for="genre in movieData.genres" :key="genre">{{ genre.name }}</v-chip>
+      <div class="gradient-overlay"></div>
+      <div class="wrapper text-white">
+        <div v-if="movieData" class="flex gap-5" id="hero-container">
+          <div>
+            <h1 class="font-bold text-3xl mb-5">{{ movieData.title }}</h1>
+            <p>{{ movieData.overview }}</p>
+            <p class="mt-5 mb-2 text-lg">Release: {{ movieData.release_date }}</p>
+            <div class="flex gap-1 flex-wrap">
+              <v-chip v-for="genre in movieData.genres" :key="genre">{{ genre.name }}</v-chip>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col gap-3" id="poster-container">
-          <div class="w-[200px] h-[300px]">
-            <img
-              class="rounded-sm"
-              :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
-              :alt="movieData.title + ' movie poster'"
-            />
-            <v-btn color="slate" class="w-full mt-3" @click="addMovieToWatchlist(movieData.id)">Add to watchlist</v-btn>
+          <div class="flex flex-col gap-3" id="poster-container">
+            <div class="w-[200px] h-[300px]">
+              <img
+                class="rounded-sm"
+                :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
+                :alt="movieData.title + ' movie poster'"
+              />
+            </div>
+            <v-btn color="slate" class="w-[200px] mt-3" @click="addMovieToWatchlist(movieData.id)">Add to watchlist</v-btn>
           </div>
         </div>
       </div>
-    </div>
+    </v-parallax>
   </div>
   <div v-if="movieData" class="wrapper">
     <div v-if="trailer?.results?.length">
@@ -185,6 +188,20 @@ onMounted(() => {
   height: 100%;
 }
 
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+}
+
+.wrapper {
+  margin: auto;
+  position: relative;
+}
+
 @media screen and (max-width: 640px) {
   #hero-container {
     flex-wrap: wrap;
@@ -193,6 +210,10 @@ onMounted(() => {
   #poster-container {
     width: 100%;
     align-items: center;
+  }
+
+  .backdrop {
+    height: 100%;
   }
 }
 </style>
