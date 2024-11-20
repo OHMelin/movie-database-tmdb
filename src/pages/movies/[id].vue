@@ -28,17 +28,18 @@
     </div>
   </div>
   <div v-if="movieData" class="wrapper">
-    <h2 class="font-bold text-2xl mt-5">Trailer</h2>
-    <div class="iframe-container">
-      <iframe
-        class="responsive-iframe rounded-md"
-        v-if="trailer.results[0].key"
-        :src="`https://www.youtube.com/embed/${trailer.results[0].key}`"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        height="100%"
-      ></iframe>
+    <div v-if="trailer?.results?.length">
+      <h2 class="font-bold text-2xl mt-5">Trailer</h2>
+      <div class="iframe-container">
+        <iframe
+          class="responsive-iframe rounded-md"
+          :src="`https://www.youtube.com/embed/${trailer?.results[0]?.key}`"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
+          allowfullscreen
+          height="100%"
+        ></iframe>
+      </div>
     </div>
 
     <h2 class="font-bold text-2xl mt-5">Actors</h2>
