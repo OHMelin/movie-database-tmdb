@@ -21,7 +21,7 @@
               :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
               :alt="movieData.title + ' movie poster'"
             />
-            <v-btn color="slate" class="w-full mt-3">Add to watchlist</v-btn>
+            <v-btn color="slate" class="w-full mt-3" @click="addMovieToWatchlist(movieData.id)">Add to watchlist</v-btn>
           </div>
         </div>
       </div>
@@ -100,6 +100,9 @@ import { ref, onMounted } from 'vue';
 import { useNuxtApp, useRoute } from '#app';
 
 const route = useRoute();
+const approved = route.query.approved === 'true';
+const requestToken = route.query.request_token;
+
 const { $axios } = useNuxtApp();
 
 const movieData = ref(null);
@@ -107,6 +110,22 @@ const backdropImage = ref(null);
 const trailer = ref(null);
 const cast = ref(null);
 const directors = ref(null);
+
+const addMovieToWatchlist = async (movieId) => {
+  const sessionId = localStorage.getItem('session_id');
+
+  if (sessionId) {
+    console.log("ADDED TO WATCHLIST")
+  } else if (approved && requestToken) {
+    const sessionResponse = await $axios.post(`/authentication/session/new`, { request_token: requestToken });
+    const newSessionId = sessionResponse.data.session_id;
+    localStorage.setItem('session_id', newSessionId);
+  } else {
+    const tokenResponse = await $axios.get(`/authentication/token/new`);
+    const token = tokenResponse.data.request_token;
+    window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:3000/movies/${movieId}`;
+  }
+};
 
 const fetchMovieData = async () => {
   const movieId = route.params.id;
