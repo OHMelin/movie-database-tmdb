@@ -10,10 +10,10 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
-<style>
-
+<style scoped>
+.slot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>

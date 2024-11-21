@@ -1,42 +1,42 @@
 <template>
   <div class="outer-wrapper">
     <v-parallax
-      :src="`https://image.tmdb.org/t/p/original${backdropImage}`"
+      :src="`https://image.tmdb.org/t/p/original${data.backdrop_image}`"
       width="100%"
       class="backdrop items-center h-[500px]"
     >
       <div class="gradient-overlay"></div>
       <div class="wrapper text-white">
-        <div v-if="movieData" class="flex gap-5" id="hero-container">
+        <div v-if="data" class="flex gap-5" id="hero-container">
           <div>
-            <h1 class="font-bold text-3xl mb-5">{{ movieData.title }}</h1>
-            <p>{{ movieData.overview }}</p>
-            <p class="mt-5 mb-2 text-lg">Release: {{ movieData.release_date }}</p>
+            <h1 class="font-bold text-3xl mb-5">{{ data.movie.title }}</h1>
+            <p>{{ data.movie.overview }}</p>
+            <p class="mt-5 mb-2 text-lg">Release: {{ data.movie.release_date }}</p>
             <div class="flex gap-1 flex-wrap">
-              <v-chip v-for="genre in movieData.genres" :key="genre">{{ genre.name }}</v-chip>
+              <v-chip v-for="genre in data.movie.genres" :key="genre">{{ genre.name }}</v-chip>
             </div>
           </div>
           <div class="flex flex-col gap-3" id="poster-container">
             <div class="w-[200px] h-[300px]">
               <img
                 class="rounded-sm"
-                :src="`https://image.tmdb.org/t/p/w200${movieData.poster_path}`"
-                :alt="movieData.title + ' movie poster'"
+                :src="`https://image.tmdb.org/t/p/w200${data.movie.poster_path}`"
+                :alt="data.title + ' movie poster'"
               />
             </div>
-            <v-btn color="slate" class="w-[200px] mt-3" @click="addMovieToWatchlist(movieData.id)">Add to watchlist</v-btn>
+            <v-btn color="slate" class="w-[200px] mt-3" @click="addMovieToWatchlist(data.movie.id)">Add to watchlist</v-btn>
           </div>
         </div>
       </div>
     </v-parallax>
   </div>
-  <div v-if="movieData" class="wrapper">
-    <div v-if="trailer?.results?.length">
+  <div v-if="data" class="wrapper">
+    <div v-if="data.trailer?.results?.length">
       <h2 class="font-bold text-2xl mt-5">Trailer</h2>
       <div class="iframe-container">
         <iframe
           class="responsive-iframe rounded-md"
-          :src="`https://www.youtube.com/embed/${trailer?.results[0]?.key}`"
+          :src="`https://www.youtube.com/embed/${data.trailer?.results[0]?.key}`"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
           allowfullscreen
@@ -49,7 +49,7 @@
     <v-sheet max-width="100%">
       <v-slide-group mobile>
         <v-slide-group-item
-          v-for="actor in cast"
+          v-for="actor in data.cast"
           :key="actor.id"
         >
           <div class="m-2 w-[200px]">
@@ -75,7 +75,7 @@
     <v-sheet max-width="100%">
       <v-slide-group mobile>
         <v-slide-group-item
-          v-for="director in directors"
+          v-for="director in data.directors"
           :key="director.id"
         >
           <div class="m-2 w-[200px]">
@@ -107,17 +107,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useNuxtApp, useRoute } from '#app';
-import { authenticate, addToWatchlist } from '@/services/tmdb.service.js';
+import { useRoute } from '#app';
+import { authenticate, addToWatchlist, getSpecificMovieData } from '@/services/tmdb.service.js';
 
 const route = useRoute();
-const { $axios } = useNuxtApp();
-
-const movieData = ref(null);
-const backdropImage = ref(null);
-const trailer = ref(null);
-const cast = ref(null);
-const directors = ref(null);
 
 const snackbar = ref({
   visible: false,
@@ -125,32 +118,18 @@ const snackbar = ref({
   type: '',
 });
 
+const data = ref({
+  movie: [],
+  backdrop_image: "",
+  trailer: "",
+  cast: [],
+  directors: [],
+})
+
 const addMovieToWatchlist = async (movieId) => {
   if (await authenticate()) {
     await addToWatchlist(movieId)
     showSnackbar('Added to your watchlist', 'green');
-  }
-};
-
-const fetchMovieData = async () => {
-  const movieId = route.params.id;
-  if (!movieId) return;
-
-  try {
-    const movieResponse = await $axios.get(`/movie/${movieId}`);
-    movieData.value = movieResponse.data;
-    backdropImage.value = movieData.value.backdrop_path;
-
-    const trailerResponse = await $axios.get(`/movie/${movieId}/videos`);
-    trailer.value = trailerResponse.data;
-
-    const castResponse = await $axios.get(`/movie/${movieId}/casts`);
-    cast.value = castResponse.data.cast;
-
-    const creditsResponse = await $axios.get(`/movie/${movieId}/credits`);
-    directors.value = creditsResponse.data.crew.filter(person => person.job === "Director");
-  } catch (error) {
-    console.error('Error fetching movie data:', error);
   }
 };
 
@@ -160,8 +139,8 @@ const showSnackbar = (message, type) => {
   snackbar.value.visible = true;
 };
 
-onMounted(() => {
-  fetchMovieData();
+onMounted(async () => {
+  data.value = await getSpecificMovieData(route.params.id);
 });
 </script>
 

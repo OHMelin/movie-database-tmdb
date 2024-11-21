@@ -20,6 +20,13 @@ Build the application for production:
 docker-compose build
 ```
 
+Alternative startup without Docker:
+
+```bash
+npm i
+npm run dev
+```
+
 ## Technologies used
 
 - Nuxt

@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   ssr: false, // Set rendering to SPA as SSR is not needed
   srcDir: 'src/', // Set source folder to keep a more organized structure
   alias: {
-    '@': fileURLToPath(new URL('./src/', import.meta.url)),
+    '@': fileURLToPath(new URL('./src/', import.meta.url)), // Set @ as root alias
   },
   css: [
     "~/assets/main.scss"

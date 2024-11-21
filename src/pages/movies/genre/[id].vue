@@ -3,9 +3,9 @@
     <v-skeleton-loader v-for="n in 5" :key="'skeleton-' + n" type="card"></v-skeleton-loader>
   </div>
   <div class="wrapper" v-if="!loading">
-    <h1 class="font-bold text-2xl mt-5 mb-2">{{ genreName.name }} movies - ({{ movieListTotal.total_results }} total)</h1>
+    <h1 class="font-bold text-2xl mt-5 mb-2">{{ data.genre_name }} movies - ({{ data.total_movies }} total)</h1>
     <div class="flex flex-wrap justify-center">
-      <NuxtLink v-for="movie in movieListData" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
+      <NuxtLink v-for="movie in data.movies" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
         <v-card
           color="wexo"
           height="300"
@@ -34,51 +34,35 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from '#app';
+import { getMovieGenreData } from '@/services/tmdb.service.js'
 
-const movieListData = ref([]);
-const movieListTotal = ref(0);
-const genreData = ref([]);
-const genreName = ref("None");
+const data = ref({
+  genre_name: "",
+  total_movies: 0,
+  movies: [],
+})
 const page = ref(1);
 const loading = ref(true);
 
 const route = useRoute();
 const router = useRouter();
-const { $axios } = useNuxtApp();
 
 watch(page, (newPage) => {
-  router.replace({ query: { ...route.query, page: newPage } });
-  fetchMovieListData();
-  window.scrollTo(0, 0);
+  const fetchData = async () => {
+    loading.value = true;
+    router.replace({ query: { ...route.query, page: newPage } });
+    data.value = await getMovieGenreData(route.params.id, newPage);
+    window.scrollTo(0, 0);
+    loading.value = false;
+  };
+
+  fetchData();
 });
 
-const fetchMovieListData = async () => {
-  const genreId = route.params.id;
-  if (!genreId) return;
-
-  try {
-    const response = await $axios.get(`/discover/movie`, {
-      params: {
-        with_genres: genreId,
-        page: page.value,
-      },
-    });
-    movieListTotal.value = response.data;
-    movieListData.value = response.data.results;
-
-    const response2 = await $axios.get(`/genre/movie/list`);
-    genreData.value = response2.data.genres;
-    genreName.value = genreData.value.find((genre) => genre.id === Number(genreId));
-  } catch (error) {
-    console.error("Error fetching movie data:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
+onMounted(async() => {
   const queryPage = Number(route.query.page) || 1;
   page.value = queryPage;
-  fetchMovieListData();
+  data.value = await getMovieGenreData(route.params.id, route.query.page);
+  loading.value = false;
 });
 </script>

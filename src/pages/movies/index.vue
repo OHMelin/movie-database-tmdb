@@ -1,9 +1,9 @@
 <template>
   <div class="outer-wrapper">
     <v-parallax
-      src="@/assets/test.webp"
+      src="@/assets/movie_hero.webp"
       width="100%"
-      class="backdrop items-center h-[500px]"
+      class="backdrop items-center h-[500px] bg-wexo"
     >
       <div class="gradient-overlay"></div>
       <div class="wrapper parallex-wrapper text-white text-center">
@@ -21,8 +21,8 @@
     </div>
   </div>
   <div class="wrapper" v-if="!loading">
-    <div v-for="genre in genreListData" :key="genre.id">
-      <h2 class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} movies - ({{ genre.totalMovies }} total)</NuxtLink></h2>
+    <div v-for="genre in data" :key="genre.id">
+      <h2 class="font-bold text-2xl mt-5 mb-2"><NuxtLink :to="'/movies/genre/' + genre.id">{{ genre.name }} movies - ({{ genre.total_movies }} total)</NuxtLink></h2>
       <v-sheet>
         <v-slide-group mobile>
           <v-slide-group-item
@@ -53,35 +53,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useNuxtApp } from '#app';
+import { getAllMovieData } from '@/services/tmdb.service.js'
 
-const genreListData = ref([]);
-const { $axios } = useNuxtApp();
+const data = ref([]);
 const loading = ref(true);
 
-const fetchGenreListData = async () => {
-  try {
-    const response = await $axios.get(`/genre/movie/list`);
-    const genres = response.data.genres;
-    genreListData.value = await Promise.all(genres.map(async (genre) => {
-      const movieResponse = await $axios.get(`/discover/movie`, {
-        params: {
-          with_genres: genre.id,
-        },
-      });
-      genre.movies = movieResponse.data.results;
-      genre.totalMovies = movieResponse.data.total_results;
-      return genre;
-    }));
-  } catch (error) {
-    console.error('Error fetching movie data:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  fetchGenreListData();
+onMounted(async() => {
+  data.value = await getAllMovieData();
+  loading.value = false;
 });
 </script>
 
