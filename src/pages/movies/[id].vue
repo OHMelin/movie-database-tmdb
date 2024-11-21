@@ -24,14 +24,14 @@
                 :alt="data.title + ' movie poster'"
               />
             </div>
-            <v-btn color="slate" class="w-[200px] mt-3" @click="addMovieToWatchlist(data.movie.id)">Add to watchlist</v-btn>
+            <v-btn color="slate" class="w-[200px] mt-3" @click="addToWatchlist(data.movie.id)">Add to watchlist</v-btn>
           </div>
         </div>
       </div>
     </v-parallax>
   </div>
   <div v-if="data" class="wrapper">
-    <h2 class="font-bold text-2xl mt-5">Trailer</h2>
+    <h2 class="font-bold text-2xl mt-5" v-if="data.trailer?.results?.length">Trailer</h2>
     <div v-if="loading">
       <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
     </div>
@@ -117,7 +117,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from '#app';
-import { authenticate, addToWatchlist, getSpecificMovieData } from '@/services/tmdb.service.js';
+import { authenticate, addMovieToWatchlist, getSpecificMovieData } from '@/services/tmdb.service.js';
 
 const route = useRoute();
 const loading = ref(true);
@@ -136,9 +136,9 @@ const data = ref({
   directors: [],
 })
 
-const addMovieToWatchlist = async (movieId) => {
+const addToWatchlist = async (movieId) => {
   if (await authenticate()) {
-    await addToWatchlist(movieId)
+    await addMovieToWatchlist(movieId)
     showSnackbar('Added to your watchlist', 'green');
   }
 };

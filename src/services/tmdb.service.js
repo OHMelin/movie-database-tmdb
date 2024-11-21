@@ -92,7 +92,7 @@ export const getSpecificMovieData = async (movieId) => {
 
 // Movies watchlist
 
-export const addToWatchlist = async (itemId) => {
+export const addMovieToWatchlist = async (itemId) => {
   const { $axios } = useNuxtApp();
   const sessionId = localStorage.getItem('session_id');
   const account = await getAccountData();
@@ -100,7 +100,7 @@ export const addToWatchlist = async (itemId) => {
   await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, media_type: 'movie', watchlist: true });
 };
 
-export const removeFromWatchlist = async (itemId) => {
+export const removeMovieFromWatchlist = async (itemId) => {
   const { $axios } = useNuxtApp();
   const sessionId = localStorage.getItem('session_id');
   const account = await getAccountData();
@@ -114,7 +114,74 @@ export const getMovieWatchlist = async () => {
   return await $axios.get(`/account/${account.id}/watchlist/movies`);
 };
 
+// Series
+
+export const getAllSeriesData = async () => {
+  const { $axios } = useNuxtApp();
+
+  const genreResponse = await $axios.get(`/genre/tv/list`);
+  const genres = genreResponse.data.genres;
+
+  const seriesByGenre = await Promise.all(
+    genres.map(async (genre) => {
+      const seriesResponse = await $axios.get(`/discover/tv`, { params: { with_genres: genre.id } });
+      return {
+        ...genre,
+        series: seriesResponse.data.results,
+        total_series: seriesResponse.data.total_results,
+      };
+    })
+  );
+
+  return seriesByGenre;
+};
+
+export const getSeriesGenreData = async (params, page = 1) => {
+  const { $axios } = useNuxtApp();
+
+  const seriesResponse = await $axios.get(`/discover/tv`, { params: { with_genres: params, page: page } });
+  const genreResponse = await $axios.get(`/genre/tv/list`);
+
+  return {
+    series: seriesResponse.data.results,
+    total_series: seriesResponse.data.total_results,
+    genre_name: genreResponse.data.genres.find((genre) => genre.id === Number(params)).name,
+  };
+};
+
+export const getSpecificSeriesData = async (seriesId) => {
+  const { $axios } = useNuxtApp();
+
+  const seriesResponse = await $axios.get(`/tv/${seriesId}`);
+  const trailerResponse = await $axios.get(`/tv/${seriesId}/videos`);
+  const creditsResponse = await $axios.get(`/tv/${seriesId}/credits`);
+
+  return {
+    series: seriesResponse.data,
+    backdrop_image: seriesResponse.data.backdrop_path,
+    trailer: trailerResponse.data,
+    cast: creditsResponse.data.cast,
+    directors: creditsResponse.data.crew,
+  }
+};
+
 // Series watchlist
+
+export const addSeriesToWatchlist = async (itemId) => {
+  const { $axios } = useNuxtApp();
+  const sessionId = localStorage.getItem('session_id');
+  const account = await getAccountData();
+
+  await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, media_type: 'tv', watchlist: true });
+};
+
+export const removeSeriesFromWatchlist = async (itemId) => {
+  const { $axios } = useNuxtApp();
+  const sessionId = localStorage.getItem('session_id');
+  const account = await getAccountData();
+
+  return await $axios.post(`/account/${account.id}/watchlist`, { session_id: sessionId, media_id: itemId, media_type: 'tv', watchlist: false, });
+};
 
 export const getSeriesWatchlist = async () => {
   const { $axios } = useNuxtApp();

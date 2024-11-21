@@ -27,7 +27,7 @@
               </v-card>
               <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ item.title }}</p>
             </NuxtLink>
-            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlistDialog(item.id)">Remove</v-btn>
+            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlistDialog(item.id, 'movie')">Remove</v-btn>
           </div>
         </v-slide-group-item>
       </v-slide-group>
@@ -43,7 +43,7 @@
           :key="item.id"
         >
           <div class="flex flex-col m-2">
-            <NuxtLink :to="'/movies/' + item.id" class="w-[200px]">
+            <NuxtLink :to="'/series/' + item.id" class="w-[200px]">
               <v-card
                 color="wexo"
                 height="300"
@@ -56,9 +56,9 @@
                 }"
               >
               </v-card>
-              <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ item.title }}</p>
+              <p class="whitespace-nowrap text-ellipsis overflow-hidden text-sm mt-1">{{ item.name }}</p>
             </NuxtLink>
-            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlistDialog(item.id)">Remove</v-btn>
+            <v-btn color="red" class="w-full" @click="handleRemoveFromWatchlistDialog(item.id, 'tv')">Remove</v-btn>
           </div>
         </v-slide-group-item>
       </v-slide-group>
@@ -72,7 +72,7 @@
     >
       <template v-slot:actions>
         <v-btn @click="dialog = false">Cancel</v-btn>
-        <v-btn color="red" @click="handleRemoveFromWatchlist(itemRef)">Confirm delete</v-btn>
+        <v-btn color="red" @click="handleRemoveFromWatchlist(itemRef, contentType)">Confirm delete</v-btn>
       </template>
     </v-card>
   </v-dialog>
@@ -87,7 +87,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { authenticate, getAccountData, getMovieWatchlist, getSeriesWatchlist, removeFromWatchlist } from '@/services/tmdb.service';
+import { authenticate, getAccountData, getMovieWatchlist, getSeriesWatchlist, removeMovieFromWatchlist, removeSeriesFromWatchlist } from '@/services/tmdb.service';
 
 const movieWatchList = ref({ data: { results: [] } });
 const seriesWatchList = ref({ data: { results: [] } });
@@ -96,6 +96,7 @@ const loading = ref(true);
 
 const dialog = ref(false);
 const itemRef = ref();
+const contentType = ref();
 
 const snackbar = ref({
   visible: false,
@@ -103,15 +104,22 @@ const snackbar = ref({
   type: '',
 });
 
-const handleRemoveFromWatchlistDialog = async (itemId) => {
+const handleRemoveFromWatchlistDialog = async (itemId, type) => {
   dialog.value = true;
   itemRef.value = itemId;
+  contentType.value = type;
 }
 
-const handleRemoveFromWatchlist = async (itemId) => {
+const handleRemoveFromWatchlist = async (itemId, contentType) => {
   dialog.value = false;
   showSnackbar('Removed from your watchlist', 'red');
-  await removeFromWatchlist(itemId)
+
+  if (contentType === 'movie') {
+    await removeMovieFromWatchlist(itemId);
+  } else if (contentType === 'tv') {
+    await removeSeriesFromWatchlist(itemId);
+  }
+
   await fetchWatchlists();
 }
 
