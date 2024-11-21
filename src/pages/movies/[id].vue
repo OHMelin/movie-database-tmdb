@@ -3,11 +3,11 @@
     <v-parallax
       :src="`https://image.tmdb.org/t/p/original${data.backdrop_image}`"
       width="100%"
-      class="backdrop items-center h-[500px]"
+      class="backdrop items-center h-[500px] bg-wexo"
     >
       <div class="gradient-overlay"></div>
-      <div class="wrapper text-white">
-        <div v-if="data" class="flex gap-5" id="hero-container">
+      <div class="wrapper text-white" v-if="!loading">
+        <div v-if="data" class="flex gap-5 justify-between" id="hero-container">
           <div>
             <h1 class="font-bold text-3xl mb-5">{{ data.movie.title }}</h1>
             <p>{{ data.movie.overview }}</p>
@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="flex flex-col gap-3" id="poster-container">
-            <div class="w-[200px] h-[300px]">
+            <div class="w-[200px] h-[300px] bg-wexo rounded-md">
               <img
                 class="rounded-sm"
                 :src="`https://image.tmdb.org/t/p/w200${data.movie.poster_path}`"
@@ -31,8 +31,11 @@
     </v-parallax>
   </div>
   <div v-if="data" class="wrapper">
+    <h2 class="font-bold text-2xl mt-5">Trailer</h2>
+    <div v-if="loading">
+      <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
+    </div>
     <div v-if="data.trailer?.results?.length">
-      <h2 class="font-bold text-2xl mt-5">Trailer</h2>
       <div class="iframe-container">
         <iframe
           class="responsive-iframe rounded-md"
@@ -46,7 +49,10 @@
     </div>
 
     <h2 class="font-bold text-2xl mt-5">Actors</h2>
-    <v-sheet max-width="100%">
+    <div v-if="loading">
+      <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
+    </div>
+    <v-sheet max-width="100%" v-if="!loading">
       <v-slide-group mobile>
         <v-slide-group-item
           v-for="actor in data.cast"
@@ -72,7 +78,10 @@
     </v-sheet>
 
     <h2 class="font-bold text-2xl mt-5">Directors</h2>
-    <v-sheet max-width="100%">
+    <div v-if="loading">
+      <v-skeleton-loader type="card" height="375"></v-skeleton-loader>
+    </div>
+    <v-sheet max-width="100%" v-if="!loading">
       <v-slide-group mobile>
         <v-slide-group-item
           v-for="director in data.directors"
@@ -111,6 +120,7 @@ import { useRoute } from '#app';
 import { authenticate, addToWatchlist, getSpecificMovieData } from '@/services/tmdb.service.js';
 
 const route = useRoute();
+const loading = ref(true);
 
 const snackbar = ref({
   visible: false,
@@ -141,6 +151,7 @@ const showSnackbar = (message, type) => {
 
 onMounted(async () => {
   data.value = await getSpecificMovieData(route.params.id);
+  loading.value = false;
 });
 </script>
 
