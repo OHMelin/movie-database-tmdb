@@ -1,4 +1,4 @@
-# WEXO TMDB Project
+# TMDB Project
 
 ## Setup
 
