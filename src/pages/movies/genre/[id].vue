@@ -7,7 +7,7 @@
     <div class="flex flex-wrap justify-center">
       <NuxtLink v-for="movie in data.movies" :key="movie.id" :to="'/movies/' + movie.id" class="m-2 w-[200px]">
         <v-card
-          color="wexo"
+          color="main"
           height="300"
           width="200"
           :style="{

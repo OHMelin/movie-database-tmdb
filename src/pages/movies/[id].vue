@@ -3,7 +3,7 @@
     <v-parallax
       :src="`https://image.tmdb.org/t/p/original${data.backdrop_image}`"
       width="100%"
-      class="backdrop items-center h-[500px] bg-wexo"
+      class="backdrop items-center h-[500px] bg-main"
     >
       <div class="gradient-overlay"></div>
       <div class="wrapper text-white" v-if="!loading">
@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="flex flex-col gap-3" id="poster-container">
-            <div class="w-[200px] h-[300px] bg-wexo rounded-md">
+            <div class="w-[200px] h-[300px] bg-main rounded-md">
               <img
                 class="rounded-sm"
                 :src="`https://image.tmdb.org/t/p/w200${data.movie.poster_path}`"
@@ -60,7 +60,7 @@
         >
           <div class="m-2 w-[200px]">
             <v-card
-              color="wexo"
+              color="main"
               height="300"
               width="200"
               :style="{
@@ -89,7 +89,7 @@
         >
           <div class="m-2 w-[200px]">
             <v-card
-              color="wexo"
+              color="main"
               height="300"
               width="200"
               :style="{

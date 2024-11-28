@@ -10,14 +10,14 @@ export default defineNuxtPlugin((app) => {
         light: {
           dark: false,
           colors: {
-            wexo: '#0b1b38',
+            main: '#0b1b38',
             slate: '#6c49eb',
           },
         },
         dark: {
           dark: true,
           colors: {
-            wexo: '#0b1b38',
+            main: '#0b1b38',
             slate: '#6c49eb',
           },
         },

@@ -3,7 +3,7 @@
     <v-parallax
       src="@/assets/movie_hero.webp"
       width="100%"
-      class="backdrop items-center h-[500px] bg-wexo"
+      class="backdrop items-center h-[500px] bg-main"
     >
       <div class="gradient-overlay"></div>
       <div class="wrapper parallex-wrapper text-white text-center">
@@ -31,7 +31,7 @@
           >
             <NuxtLink :to="'/movies/' + movie.id" class="m-2 w-[200px]">
               <v-card
-                color="wexo"
+                color="main"
                 height="300"
                 width="200"
                 :style="{

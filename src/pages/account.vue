@@ -14,7 +14,7 @@
           <div class="flex flex-col m-2">
             <NuxtLink :to="'/movies/' + item.id" class="w-[200px]">
               <v-card
-                color="wexo"
+                color="main"
                 height="300"
                 width="200"
                 :style="{
@@ -45,7 +45,7 @@
           <div class="flex flex-col m-2">
             <NuxtLink :to="'/series/' + item.id" class="w-[200px]">
               <v-card
-                color="wexo"
+                color="main"
                 height="300"
                 width="200"
                 :style="{

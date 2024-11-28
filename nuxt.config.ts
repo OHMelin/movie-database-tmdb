@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 export default defineNuxtConfig({
   app: {
     head: {
-      title: 'WMDB - WEXO Movie Database',
+      title: 'Movie Database',
       meta: [
         { name: 'description', content: 'Lorem, ipsum.' },
       ],

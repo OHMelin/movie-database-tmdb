@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar class="bg-wexo">
+  <v-toolbar class="bg-main">
     <div class="flex gap-3">
       <div class="m-auto ml-5">
         <NuxtLink to="/">
